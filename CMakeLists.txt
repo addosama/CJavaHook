@@ -43,24 +43,6 @@ target_include_directories(JavaHookLib
 # Capstone      → expect Capstone installed or capstone_ROOT
 # Windows SDK   → linked implicitly on MSVC
 
-find_package(JNI QUIET)
-if(JNI_FOUND)
-    target_include_directories(JavaHookLib PUBLIC ${JNI_INCLUDE_DIRS})
-    target_link_libraries(JavaHookLib PUBLIC ${JNI_LIBRARIES})
-else()
-    message(STATUS "JNI not found via find_package — ensure JNI include dirs are on the include path")
-endif()
-
-# Capstone (optional; if not found, define CAPSTONE_INCLUDE_DIR and CAPSTONE_LIBRARY manually)
-find_path(CAPSTONE_INCLUDE_DIR capstone/capstone.h)
-find_library(CAPSTONE_LIBRARY capstone)
-if(CAPSTONE_INCLUDE_DIR AND CAPSTONE_LIBRARY)
-    target_include_directories(JavaHookLib PRIVATE ${CAPSTONE_INCLUDE_DIR})
-    target_link_libraries(JavaHookLib PRIVATE ${CAPSTONE_LIBRARY})
-else()
-    message(STATUS "Capstone not found — set CAPSTONE_INCLUDE_DIR and CAPSTONE_LIBRARY if needed")
-endif()
-
 # Windows libraries
 if(WIN32)
     target_link_libraries(JavaHookLib PRIVATE psapi)
